@@ -32,8 +32,14 @@ public class UserService {
         }
     }
 
-    public boolean authenticateUser(String username, String password) {
-        return repository.authenticate(username, password) != null;
+    public ResponseEntity<ApiResponse<User>> authenticateUser(String username, String password) {
+       User user=repository.authenticate(username, password);
+        if (user==null){
+           return Response.authenticationUnsuccessful();
+       }else {
+           return Response.authenticationSuccessful(user);
+       }
+        //return repository.authenticate(username, password) != null;
     }
 }
 

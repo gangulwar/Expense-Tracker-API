@@ -8,18 +8,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService service;
 
-    @PostMapping("/newUser")
+    @PostMapping("/new")
     public ResponseEntity<ApiResponse<User>> newUser(@RequestBody User user) {
         return service.saveUser(user);
     }
 
     @GetMapping("/auth")
-    public boolean checkUser(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<ApiResponse<User>> checkUser(@RequestParam String username, @RequestParam String password) {
         return service.authenticateUser(username, password);
     }
+
 }

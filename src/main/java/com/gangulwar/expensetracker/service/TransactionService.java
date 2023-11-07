@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransactionService {
     @Autowired
@@ -27,5 +29,37 @@ public class TransactionService {
         System.out.println(expense.getDateTime());
         jdbcTemplate.update(insertExpenseSQL, expense.getAmount(), expense.isCredit(), expense.getCategory(), expense.getDescription(), expense.getDateTime());
         return Response.expenseAddedSuccessful(expense);
+    }
+
+    public List<Expense> getAllExpenses(String username) {
+        String sql = "SELECT * FROM " + username;
+
+        List<Expense> expenseList = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Expense expense = new Expense();
+            expense.setId(rs.getLong("transaction_id"));
+            expense.setDateTime(rs.getTimestamp("transaction_date").toLocalDateTime());
+            expense.setAmount(rs.getDouble("amount"));
+            expense.setDescription(rs.getString("description"));
+            expense.setCategory(rs.getString("category"));
+            expense.setCredit(rs.getBoolean("isCredited"));
+            return expense;
+        });
+
+        return expenseList;
+    }
+
+    public ResponseEntity<ApiResponse<Expense>> update(Expense expense, String username, Long id) {
+        String query = "UPDATE " + username +
+                " SET amount = ?, isCredited = ?, category = ?, description = ?, transaction_date = ? " +
+                " WHERE transaction_id = ?";
+        jdbcTemplate.update(query, expense.getAmount(), expense.isCredit(), expense.getCategory(), expense.getDescription(), expense.getDateTime(), id);
+        expense.setId(id);
+        return Response.updateExpenseSuccessful(expense);
+    }
+
+    public ResponseEntity<ApiResponse<Expense>> delete(String username, Long id) {
+        String query = "DELETE FROM " + username + " WHERE transaction_id = ?";
+        jdbcTemplate.update(query, id);
+        return Response.deleteExpenseSuccessful();
     }
 }

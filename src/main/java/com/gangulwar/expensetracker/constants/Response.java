@@ -28,21 +28,36 @@ public class Response {
 
     public static ResponseEntity<ApiResponse<User>> authenticationSuccessful(User user) {
         ApiResponse<User> response = new ApiResponse<>("successful", "Authenticated Successfully", user);
-        return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
     public static ResponseEntity<ApiResponse<User>> authenticationUnsuccessful() {
         ApiResponse<User> response = new ApiResponse<>();
         response.setStatus("failure");
         response.setMessage("Authenticated Unsuccessfully");
-        return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
     }
 
-    public static ResponseEntity<ApiResponse<Expense>> expenseAddedSuccessful(Expense expense){
-        ApiResponse<Expense> response =new ApiResponse<>();
+    public static ResponseEntity<ApiResponse<Expense>> expenseAddedSuccessful(Expense expense) {
+        ApiResponse<Expense> response = new ApiResponse<>();
         response.setStatus("success");
         response.setMessage("Expense Added Successfully");
         response.setData(expense);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    public static ResponseEntity<ApiResponse<Expense>> updateExpenseSuccessful(Expense expense) {
+        ApiResponse<Expense> response = new ApiResponse<>();
+        response.setStatus("success");
+        response.setMessage("Expense Updated Successfully");
+        response.setData(expense);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public static ResponseEntity<ApiResponse<Expense>> deleteExpenseSuccessful() {
+        ApiResponse<Expense> response = new ApiResponse<>();
+        response.setStatus("success");
+        response.setMessage("Expense Deleted Successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

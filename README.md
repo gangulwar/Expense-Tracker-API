@@ -2,7 +2,7 @@
 
 ## Overview
 
-RESTful web service built with Spring Boot, using SQL for the database and provides endpoints for creating, updating, and retrieving expense records.
+RESTful web service built with Spring Boot, using MySQL for the database and provides endpoints for creating, updating, and retrieving expense records.
 
 ## Table of Contents
 
@@ -57,7 +57,7 @@ The expense_base table acts as a foundational template for individual user expen
 ## Endpoints
 1. Creating a new user
 
-   ```GET /user/new```
+   ```POST /user/new```
 
 ### Request Body
 ```
@@ -99,28 +99,31 @@ The expense_base table acts as a foundational template for individual user expen
 ```
 2. Authentication of a user
    
-   ```GET /user/auth?username={username}&password={password}```
+   ```POST /user/auth```
+
+### Request Body
+
+```
+{
+    "username":"[username]" ,
+    "password": "[password]"
+}
+```
 
 ### Success Response
 ```
 {
     "status": "successful",
     "message": "Authenticated Successfully",
-    "data": {
-        "userId": "[userid]", //generated
-        "username": "[username]",
-        "password": "[password]",
-        "emailId": "[email id]"
-    }
+    "token": "[JWT TOKEN]"
 }
-
 ```
 
 ### Failure Response
 ```
 {
     "status": "failure",
-    "message": "Authenticated Unsuccessfully",
+    "message": "Unauthorized: Authentication unsuccessful.",
     "data": null
 }
 ```
@@ -128,6 +131,12 @@ The expense_base table acts as a foundational template for individual user expen
 3. Add a expense
    
    ```POST /expense/add/{username} ```
+
+### Header
+
+```
+Authorization: Bearer [JWT Token]
+```
 
 ### Request Body
 
@@ -161,6 +170,11 @@ The expense_base table acts as a foundational template for individual user expen
 
    ```GET /expense/get/all/{username}```
 
+### Header
+
+```
+Authorization: Bearer [JWT Token]
+```
 
 ### Response
 ```
@@ -196,6 +210,12 @@ The expense_base table acts as a foundational template for individual user expen
 
    ```PUT /expense/update/{username}/{id}```
 
+### Header
+
+```
+Authorization: Bearer [JWT Token]
+```
+
 ### Request Body
 ```
 {
@@ -228,6 +248,12 @@ The expense_base table acts as a foundational template for individual user expen
 
    ```/expense/delete/{username}/{id} ```
 
+### Header
+
+```
+Authorization: Bearer [JWT Token]
+```
+
 ### Response
 ```
 {
@@ -236,4 +262,3 @@ The expense_base table acts as a foundational template for individual user expen
     "data": null
 }
 ```
-

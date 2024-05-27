@@ -36,7 +36,7 @@ public class Response {
 //        ApiResponse<User> response = new ApiResponse<>();
 //        response.setStatus("failure");
 //        response.setMessage("Authenticated Unsuccessfully");
-        AuthResponse authResponse = new AuthResponse("failure", "Authentication Unsuccessful",null);
+        AuthResponse authResponse = new AuthResponse("failure", "Unauthorized: Authentication unsuccessful.",null);
         return new ResponseEntity<>(authResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 

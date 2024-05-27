@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,15 +38,19 @@ public class UserController {
 
     @PostMapping("/auth")
     public ResponseEntity<AuthResponse> checkUser(@RequestBody AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        if (authentication.isAuthenticated()) {
-            String generatedToken = jwtService.generateToken(authRequest.getUsername());
-            return Response.authenticationSuccessful(generatedToken);
-        } else {
-                    return Response.authenticationUnsuccessful();
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            if (authentication.isAuthenticated()) {
+                String generatedToken = jwtService.generateToken(authRequest.getUsername());
+                return Response.authenticationSuccessful(generatedToken);
+            } else {
+                return Response.authenticationUnsuccessful();
 //            throw new UsernameNotFoundException("invalid user request !");
+            }
+        } catch (AuthenticationException ex) {
+            return Response.authenticationUnsuccessful();
         }
 
     }
-
 }

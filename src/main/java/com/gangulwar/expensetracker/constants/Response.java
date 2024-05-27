@@ -26,16 +26,18 @@ public class Response {
     }
 
 
-    public static ResponseEntity<ApiResponse<User>> authenticationSuccessful(User user) {
-        ApiResponse<User> response = new ApiResponse<>("successful", "Authenticated Successfully", user);
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    public static ResponseEntity<AuthResponse> authenticationSuccessful(String token) {
+//        ApiResponse<User> response = new ApiResponse<>("successful", "Authenticated Successfully", user);
+        AuthResponse authResponse = new AuthResponse("successful", "Authenticated Successfully", token);
+        return new ResponseEntity<>(authResponse, HttpStatus.ACCEPTED);
     }
 
-    public static ResponseEntity<ApiResponse<User>> authenticationUnsuccessful() {
-        ApiResponse<User> response = new ApiResponse<>();
-        response.setStatus("failure");
-        response.setMessage("Authenticated Unsuccessfully");
-        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+    public static ResponseEntity<AuthResponse> authenticationUnsuccessful() {
+//        ApiResponse<User> response = new ApiResponse<>();
+//        response.setStatus("failure");
+//        response.setMessage("Authenticated Unsuccessfully");
+        AuthResponse authResponse = new AuthResponse("failure", "Authentication Unsuccessful",null);
+        return new ResponseEntity<>(authResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
     public static ResponseEntity<ApiResponse<Expense>> expenseAddedSuccessful(Expense expense) {
